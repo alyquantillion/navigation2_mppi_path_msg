@@ -212,8 +212,7 @@ CollisionCost ObstaclesCritic::costAtPose(float x, float y, float theta)
   }
   cost = collision_checker_.pointCost(x_i, y_i);
 
-  if (consider_footprint_ &&
-    (cost >= possibly_inscribed_cost_ || possibly_inscribed_cost_ < 1.0f))
+  if (consider_footprint_)
   {
     cost = static_cast<float>(collision_checker_.footprintCostAtPose(
         x, y, theta, costmap_ros_->getRobotFootprint()));
