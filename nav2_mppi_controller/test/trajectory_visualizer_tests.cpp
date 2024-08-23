@@ -59,7 +59,8 @@ TEST(TrajectoryVisualizerTests, VisPathRepub)
   TrajectoryVisualizer vis;
   vis.on_configure(node, "my_name", "map", parameters_handler.get());
   vis.on_activate();
-  vis.visualize(pub_path);
+  builtin_interfaces::msg::Time bogus_stamp;
+  vis.visualize(pub_path, bogus_stamp);
 
   rclcpp::spin_some(node->get_node_base_interface());
   EXPECT_EQ(recieved_path.poses.size(), 5u);
@@ -83,7 +84,8 @@ TEST(TrajectoryVisualizerTests, VisOptimalTrajectory)
   vis.on_activate();
   vis.add(optimal_trajectory, "Optimal Trajectory");
   nav_msgs::msg::Path bogus_path;
-  vis.visualize(bogus_path);
+  builtin_interfaces::msg::Time bogus_stamp;
+  vis.visualize(bogus_path, bogus_stamp);
 
   rclcpp::spin_some(node->get_node_base_interface());
   EXPECT_EQ(recieved_msg.markers.size(), 0u);
@@ -91,7 +93,7 @@ TEST(TrajectoryVisualizerTests, VisOptimalTrajectory)
   // Now populated with content, should publish
   optimal_trajectory = xt::ones<float>({20, 2});
   vis.add(optimal_trajectory, "Optimal Trajectory");
-  vis.visualize(bogus_path);
+  vis.visualize(bogus_path, bogus_stamp);
 
   rclcpp::spin_some(node->get_node_base_interface());
 
@@ -147,7 +149,8 @@ TEST(TrajectoryVisualizerTests, VisCandidateTrajectories)
   vis.on_activate();
   vis.add(candidate_trajectories, "Candidate Trajectories");
   nav_msgs::msg::Path bogus_path;
-  vis.visualize(bogus_path);
+  builtin_interfaces::msg::Time bogus_stamp;
+  vis.visualize(bogus_path, bogus_stamp);
 
   rclcpp::spin_some(node->get_node_base_interface());
   // 40 * 4, for 5 trajectory steps + 3 point steps
